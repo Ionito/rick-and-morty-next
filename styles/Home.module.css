@@ -76,9 +76,14 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  width: 100%;
 
   max-width: 800px;
   margin-top: 3rem;
+}
+
+.search input {
+  margin-right: 0.5em;
 }
 
 .card {
@@ -91,6 +96,9 @@
   border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .card:hover,
@@ -101,6 +109,7 @@
 }
 
 .card h3 {
+  text-align: center;
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
 }
@@ -119,5 +128,14 @@
   .grid {
     width: 100%;
     flex-direction: column;
+  }
+  .search input {
+    margin-right: 0;
+    margin-bottom: 0.5em;
+  }
+
+  .search input,
+  .search button {
+    width: 100%;
   }
 }
