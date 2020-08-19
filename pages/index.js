@@ -1,7 +1,15 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import styles from '../styles/Home.module.css'
+import { useState, useEffect, useRef } from 'react'
+import {
+  Stack,
+  Heading,
+  SimpleGrid,
+  Box,
+  Image,
+  Input,
+  Button,
+} from '@chakra-ui/core'
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`
 
@@ -19,6 +27,7 @@ export default function Home({ data }) {
   const { info, results: defaultResults = [] } = data
   const [results, updateResults] = useState(defaultResults)
   const [page, updatePage] = useState({ ...info, current: defaultEndpoint })
+  const queryInput = useRef(null)
 
   const { current } = page
 
@@ -54,62 +63,119 @@ export default function Home({ data }) {
   }
 
   const handleOnSubmitSearch = (e) => {
-    e.preventDefault()
-    const { currentTarget = {} } = e
-    const fields = Array.from(currentTarget?.elements)
-    const fieldQuery = fields.find((field) => field.name === 'query')
-    const value = fieldQuery.value || ''
+    e && e.preventDefault()
+
+    const value = queryInput.current.value || ''
     const endpoint = `https://rickandmortyapi.com/api/character/?name=${value}`
 
     updatePage({ current: endpoint })
   }
 
+  const keyUp = (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      handleOnSubmitSearch()
+    }
+  }
+
   return (
-    <div className={styles.container}>
+    <Stack bg="green.700" p={4}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Wubba Lubba Dub Dub!</h1>
-        <p className={styles.description}>Rick and Morty Character Wiki</p>
+      <Stack
+        bg="green.200"
+        rounded="10px"
+        isInline
+        justifyContent="space-between"
+      >
+        <Stack p={8}>
+          <Heading size={['xl']} color="tomato">
+            Wubba Lubba Dub Dub!
+          </Heading>
+          <p>Rick and Morty Character Wiki</p>
+        </Stack>
+        <Stack justifyContent="flex-end" pr={4}>
+          <Image src="/rick.png" maxW="150px" objectFit="cover" />
+        </Stack>
+      </Stack>
 
-        <form className={styles.search} onSubmit={handleOnSubmitSearch}>
-          <input name="query" type="search" />
-          <button>Search</button>
-        </form>
-
-        <ul className={styles.grid}>
-          {results.map((result) => {
-            const { id, name, image } = result
-            return (
-              <li className={styles.card} key={id}>
-                <Link href={`/character/${id}`}>
-                  <a>
-                    <h3>{name}</h3>
-                    <img src={image} alt={`${name} Thumbnail`} />
-                  </a>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-        <p>
-          <button onClick={handleLoadMore}>Load More</button>
-        </p>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Stack p="4" justifyContent="center" isInline>
+        <Input
+          name="query"
+          type="search"
+          focusBorderColor="pink.400"
+          color="gray.900"
+          borderX="2px solid tomato"
+          bg="green.300"
+          rounded="10px"
+          fontWeight="800"
+          px="4"
+          py="2"
+          variant="unstyled"
+          ref={queryInput}
+          maxW="400px"
+          onKeyUp={keyUp}
+        />
+        <Button
+          variant="outline"
+          color="tomato"
+          variantColor="red"
+          onClick={handleOnSubmitSearch}
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+          Search
+        </Button>
+      </Stack>
+
+      <SimpleGrid minChildWidth="320px" spacing={5} py={4} px={8}>
+        {results?.map((result) => {
+          const { id, name, image } = result
+          return (
+            <Box
+              key={id}
+              bg="green.200"
+              py="4"
+              rounded="20px"
+              borderX="4px solid tomato"
+            >
+              <Link href={`/character/${id}`}>
+                <a>
+                  <Heading
+                    as="h3"
+                    py={2}
+                    mx="auto"
+                    size="md"
+                    color="tomato"
+                    textAlign="center"
+                  >
+                    {name}
+                  </Heading>
+
+                  <Image
+                    rounded="20px"
+                    border="1px solid #444"
+                    mx="auto"
+                    src={image}
+                    alt={`${name} Thumbnail`}
+                  />
+                </a>
+              </Link>
+            </Box>
+          )
+        })}
+      </SimpleGrid>
+      <Stack alignItems="center">
+        <Button
+          variant="outline"
+          maxW="200px"
+          color="tomato"
+          variantColor="red"
+          onClick={handleLoadMore}
+        >
+          Load More
+        </Button>
+      </Stack>
+    </Stack>
   )
 }

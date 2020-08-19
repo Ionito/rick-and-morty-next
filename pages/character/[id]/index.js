@@ -1,6 +1,16 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import styles from '../../../styles/Home.module.css'
+import {
+  Stack,
+  Heading,
+  Tag,
+  Box,
+  Image,
+  Input,
+  Button,
+  List,
+  ListItem,
+} from '@chakra-ui/core'
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`
 
@@ -19,50 +29,62 @@ export default function Character({ data }) {
   console.log(data)
   const { name, image, gender, status } = data
   return (
-    <div className={styles.container}>
+    <Stack
+      bg="green.700"
+      justifyItems="center"
+      alignItems="center"
+      p={4}
+      h={'100vh'}
+      spacing={4}
+    >
       <Head>
         <title>{name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>{name}</h1>
-        <div className="profile">
-          <div className="profile-img">
-            <img src={image} alt={`image${name}`} />
-          </div>
-          <div className="profile-details">
-            <h2>Character Details</h2>
-            <ul>
-              <li>
-                <strong>Name:</strong> {name}
-              </li>
-              <li>
-                <strong>Status:</strong> {status}
-              </li>
-              <li>
-                <strong>Gender:</strong> {gender}
-              </li>
-            </ul>
-          </div>
+      <Stack p={8}>
+        <Heading textAlign="center" isTruncated size="xl" color="tomato">
+          {name}
+        </Heading>
+      </Stack>
+
+      <Stack>
+        <Image
+          rounded="10px"
+          borderX="4px solid tomato"
+          src={image}
+          alt={`image${name}`}
+        />
+
+        <div className="profile-details">
+          <Heading color="tomato" pb={2} fontWeight="600">
+            Character Details
+          </Heading>
+          <List spacing={3} styleType="none">
+            <ListItem color="tomato" fontWeight="600">
+              Name <Tag>{name} </Tag>
+            </ListItem>
+            <ListItem color="tomato" fontWeight="600">
+              Status <Tag>{status} </Tag>
+            </ListItem>
+            <ListItem color="tomato" fontWeight="600">
+              Gender <Tag>{gender} </Tag>
+            </ListItem>
+          </List>
         </div>
-        <p className="back">
+      </Stack>
+      <Stack>
+        <Button
+          variant="outline"
+          maxW="200px"
+          color="tomato"
+          variantColor="red"
+        >
           <Link href="/">
             <a>Back to All Characters</a>
           </Link>
-        </p>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+        </Button>
+      </Stack>
+    </Stack>
   )
 }
