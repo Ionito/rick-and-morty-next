@@ -153,6 +153,7 @@ export default function Home({ data }) {
                   </Heading>
 
                   <Image
+                    size="300px"
                     rounded="20px"
                     border="1px solid #444"
                     mx="auto"
